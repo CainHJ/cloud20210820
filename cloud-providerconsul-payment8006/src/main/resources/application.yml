@@ -1,0 +1,18 @@
+## 端口号
+server:
+  port: 8006
+
+## 微服务名
+spring:
+  devtools:
+    restart:
+      poll-interval: 2s
+      quiet-period: 1s
+  application:
+    name: consul-provider-payment
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
