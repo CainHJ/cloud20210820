@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
  * @version 1.0
  * @date 2021/10/14 18:24
  */
+//
 @Configuration
 public class ApplicationContextConfig {
     @Bean

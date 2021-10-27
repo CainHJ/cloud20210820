@@ -9,6 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @version 1.0
  * @date 2021/10/18 10:20
  */
+//
 @SpringBootApplication
 @EnableDiscoveryClient
 public class OrderConsulMain80 {

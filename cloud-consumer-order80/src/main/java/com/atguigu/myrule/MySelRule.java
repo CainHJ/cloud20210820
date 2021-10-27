@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0
  * @date 2021/10/18 16:42
  */
+//
 @Configuration
 public class MySelRule {
     @Bean

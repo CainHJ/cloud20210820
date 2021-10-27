@@ -11,6 +11,7 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
  * @version 1.0
  * @date 2021/8/26 11:06
  */
+//
 @SpringBootApplication
 @EnableEurekaClient
 //@RibbonClient(name="CLOUD-PAYMENT-SERVICE",configuration = MySelRule.class)//替换负载规则

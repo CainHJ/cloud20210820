@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor//这个注解是有参构造
 @NoArgsConstructor //这个注解是无参构造
+//1
 public class CommonResult<T> {
     private Integer code;
     private String  message;
