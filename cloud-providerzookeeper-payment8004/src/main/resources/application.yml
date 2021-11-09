@@ -2,6 +2,7 @@
 server:
   port: 8004
 
+
 ## 微服务名
 spring:
   devtools:
