@@ -2,6 +2,7 @@
 server:
   port: 7001
 
+
 eureka:
   instance:
     hostname: eureka7001.com #eureka 服务的实例名称

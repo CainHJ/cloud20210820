@@ -2,7 +2,6 @@
 server:
   port: 80
 
-
 ## 微服务名
 spring:
   devtools:
