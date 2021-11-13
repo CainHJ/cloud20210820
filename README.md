@@ -86,5 +86,19 @@ eureka:
       #defaultZone: http://localhost:7001/eureka/
       defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/ #集群
 ```
+>> 主启动
+```java
+@SpringBootApplication
+@EnableFeignClients//激活feign
+public class OrderFeignMain80 {
+    public static void main(String[] args) {
+        SpringApplication.run(OrderFeignMain80.class,args);
+    }
+}
+```
+>> 业务逻辑
+>>> 业务逻辑接口+`@FeignClient配置调用provider服务`
 
+>>> `新建PaymentFeignService接口`并新增注解@FeignClient
 
+>>> 控制层Controller
