@@ -67,7 +67,7 @@
     </dependencies>
 ```
 * `能看到`
-![Image text](image/16365266621.jpg)
+![Image text]()
 
 >> yml
 ```yaml
