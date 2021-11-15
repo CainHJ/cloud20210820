@@ -67,7 +67,7 @@
     </dependencies>
 ```
 * `能看到`
-![Image text](https://github.com/CainHJ/cloud20210820/blob/master/image/16365266621.png?raw=true)
+![Image text](image/16365266621.png?raw=true)
 
 >> yml
 ```yaml
