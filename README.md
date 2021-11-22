@@ -173,3 +173,45 @@ ribbon:
   ##这两个的用法不是很清楚
   ##重要的是他们居然不能默认打出 我真的很无语
 ```
+>> OpenFeign日志打印功能
+>>> 日志打印功能
+* `Feign`提供了日志打印功能,我们可以通过配置调整日志级别,从而了解`Feign`中`http`请求的细节
+* `对Feign接口的调用情况进行监控输出`
+>>> 日志级别
+* `NONE:` 默认的,不显示任何日志
+* `BASIC:` 仅记录请求方法 URL 响应状态码及执行时间
+* `HEADERS:` 除了`BASIC`中定义的信息之外,还有请求响应的头信息
+* `FULL:` 除了`HEADERS`中定义的信息之外,还有请求和响应的正文及元数据
+
+>>> 配置日志bean
+* `feign80`中加配置`bean`
+```java
+package com.atguigu.springCloud.config;
+
+import feign.Logger;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+
+/**
+ * @author HJ
+ * @version 1.0
+ * @date 2021/11/22 18:52
+ */
+@Configuration
+public class FeignConfig {
+    @Bean
+    Logger.Level feignLoggerLevel(){
+        return Logger.Level.FULL;
+    }
+
+}
+```
+>>> YML文件里需要开启日志的Fegin客户端
+* `feign80`中的`yml`文件加
+```yaml
+logging:
+  level:
+    com.atguigu.springCloud.service.PaymentFeignService: debug
+```
+>>> 后台日志查看

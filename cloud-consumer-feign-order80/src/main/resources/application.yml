@@ -18,3 +18,6 @@ ribbon:
   ReadTimeout: 5000
   #指的建立连接后,从服务器读取到可用资源所用的时间
   ConnectTimeout: 5000
+logging:
+  level:
+    com.atguigu.springCloud.service.PaymentFeignService: debug
