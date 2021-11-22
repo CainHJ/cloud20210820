@@ -154,6 +154,7 @@ public class OrderFeignController {
 > 测试
 >>测试之前 只开8001 因为8002没有这个方法
 ![Image text](image/1637571277.png?raw=true)
+
 >> http://localhost/consumer/payment/feign/timeout
 
 >> 错误页面
