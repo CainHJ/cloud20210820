@@ -24,4 +24,10 @@ public class OrderFeignController {
     public CommonResult<Payment>getPaymentById(@PathVariable("id") Long id){
         return paymentFeignService.getPaymentById(id);
     }
+
+    @GetMapping(value = "/consumer/payment/feign/timeout")
+    public String paymentFeignTimeout(){
+        //openfein-ribbon 客户端一般默认等待1秒钟 就是说三秒是会出问题的
+        return paymentFeignService.paymentFeignTimeout();
+    }
 }

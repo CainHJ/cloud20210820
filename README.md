@@ -120,3 +120,55 @@ public class OrderFeignController {
     }
 }
 ```
+
+#2021-11-22
+###OpenFeign的超时控制
+* 超时设置,故意设置超时演示情况出错
+> 服务提供方8001故意写暂停程序
+>> 在8001的`PaymentController` 加入方法
+```java_holder_method_tree
+    @GetMapping(value = "/payment/feign/timeout")
+    public String paymentFeignTimeout(){
+        try {
+            //直接阻塞3分钟
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return serverPort;
+    }
+```
+> 服务消费方80添加超时方法`PaymentFeignService`
+```java_holder_method_tree
+    @GetMapping(value = "/payment/feign/timeout")
+    public String paymentFeignTimeout();
+```
+> 服务消费方80添加超时方法`OrderFeignController`
+```java_holder_method_tree
+    @GetMapping(value = "/consumer/payment/feign/timeout")
+    public String paymentFeignTimeout(){
+        //openfein-ribbon 客户端一般默认等待1秒钟 就是说三秒是会出问题的
+        return paymentFeignService.paymentFeignTimeout();
+    }
+```
+> 测试
+>>测试之前 只开8001 因为8002没有这个方法
+![Image text](image/1637571277.png?raw=true)
+>> http://localhost/consumer/payment/feign/timeout
+
+>> 错误页面
+* `openfeign`默认是1秒返回,但是逻辑执行走了3秒,超时报错
+![Image text](image/1637571957.png?raw=true)
+>>`解决方法:` `YML`文件需要开启`OpenFeign`客户端超时控制
+```yaml
+##设置feign客户端超时时间(OpenFeign默认支持ribbon)
+ribbon:
+  #指的建立连接所用的时间,适用于网络状况正常的情况下,两端连接所用时间
+  ##这个注释掉 报错
+  ReadTimeout: 5000
+  #指的建立连接后,从服务器读取到可用资源所用的时间  
+  ##这个注释掉 不报错
+  ConnectTimeout: 5000
+  ##这两个的用法不是很清楚
+  ##重要的是他们居然不能默认打出 我真的很无语
+```
