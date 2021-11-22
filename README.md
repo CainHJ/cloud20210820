@@ -98,7 +98,25 @@ public class OrderFeignMain80 {
 ```
 >> 业务逻辑
 >>> 业务逻辑接口+`@FeignClient配置调用provider服务`
-
 >>> `新建PaymentFeignService接口`并新增注解@FeignClient
-
+```java
+@Component
+@FeignClient(value = "CLOUD-PAYMENT-SERVICE")//知道eruaka服务方的ip
+public interface PaymentFeignService {
+    @GetMapping(value = "/payment/get/{id}")//知道eureka服务方的上下文地址
+    public CommonResult<Payment> getPaymentById(@PathVariable("id") Long id);
+}
+```
 >>> 控制层Controller
+```java
+@RestController
+@Slf4j
+public class OrderFeignController {
+    @Resource
+    private PaymentFeignService paymentFeignService;
+    @GetMapping(value = "/consumer/payment/get/{id}")
+    public CommonResult<Payment>getPaymentById(@PathVariable("id") Long id){
+        return paymentFeignService.getPaymentById(id);
+    }
+}
+```
