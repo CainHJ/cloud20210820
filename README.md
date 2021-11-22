@@ -122,10 +122,10 @@ public class OrderFeignController {
 ```
 
 #2021-11-22
-###OpenFeign的超时控制
+> OpenFeign的超时控制
 * 超时设置,故意设置超时演示情况出错
-> 服务提供方8001故意写暂停程序
->> 在8001的`PaymentController` 加入方法
+>> 服务提供方8001故意写暂停程序
+>>> 在8001的`PaymentController` 加入方法
 ```java_holder_method_tree
     @GetMapping(value = "/payment/feign/timeout")
     public String paymentFeignTimeout(){
@@ -138,12 +138,12 @@ public class OrderFeignController {
         return serverPort;
     }
 ```
-> 服务消费方80添加超时方法`PaymentFeignService`
+>> 服务消费方80添加超时方法`PaymentFeignService`
 ```java_holder_method_tree
     @GetMapping(value = "/payment/feign/timeout")
     public String paymentFeignTimeout();
 ```
-> 服务消费方80添加超时方法`OrderFeignController`
+>> 服务消费方80添加超时方法`OrderFeignController`
 ```java_holder_method_tree
     @GetMapping(value = "/consumer/payment/feign/timeout")
     public String paymentFeignTimeout(){
@@ -151,16 +151,16 @@ public class OrderFeignController {
         return paymentFeignService.paymentFeignTimeout();
     }
 ```
-> 测试
->>测试之前 只开8001 因为8002没有这个方法
+>> 测试
+>>> 测试之前 只开8001 因为8002没有这个方法
 ![Image text](image/1637571277.png?raw=true)
 
->> http://localhost/consumer/payment/feign/timeout
+>>> http://localhost/consumer/payment/feign/timeout
 
->> 错误页面
+>>> 错误页面
 * `openfeign`默认是1秒返回,但是逻辑执行走了3秒,超时报错
 ![Image text](image/1637571957.png?raw=true)
->>`解决方法:` `YML`文件需要开启`OpenFeign`客户端超时控制
+>>> `解决方法:` `YML`文件需要开启`OpenFeign`客户端超时控制
 ```yaml
 ##设置feign客户端超时时间(OpenFeign默认支持ribbon)
 ribbon:
