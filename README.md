@@ -235,4 +235,84 @@ logging:
 * `fallback:` 降级(就是不可用,我们的处理方案,如程序运行异常,超时,服务熔断触发服务降级,线程池/信号量打满也会导致服务降级,友好一些)
 * `break:` 熔断(比如保险是达到最大服务访问后,直接拒绝访问,拉闸限电,然后调用服务降级得方法并返回友好提示,功能类似保险丝,强硬一些)
 * `flowlimit:` 限流(秒杀高并发等操作,严禁一窝蜂得过来挤,大家排队,一秒多少个,有序进行)
->> Hystrix
+>> Hystrix案例
+>>> 构建
+* 新建`cloud-provider-hystrix-payment8001`
+* POM 
+```xml
+ <dependencies>
+        <!--hystrix-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+        <!--eureka client-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atguigu.springcloud</groupId>
+            <artifactId>cloud-api-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!--热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <!--            <scope>runtime</scope>-->
+            <optional>true</optional>
+        </dependency>
+</dependencies>
+```
+* YML
+```yaml
+server:
+  8001
+spring:
+  application:
+    name: cloud-provider-hystrix-payment
+eureka:
+  client:
+    #false 表示不向注册中心注册
+    register-with-eureka: true
+    #false 表示自己端就是注册中心，我的职责就是维护，并不需要检查
+    fetch-registry: true
+    service-url:
+      defaultZone: http: http://eureka7001.com
+```
+* 主启动
+```java
+@SpringBootApplication
+@EnableEurekaClient
+public class PaymentHystrixMain8001 {
+    public static void main(String[] args) {
+        SpringApplication.run(PaymentHystrixMain8001.class,args);
+    }
+}
+```
+* 业务类 
+* 正常测试
+
+>>> 高并发测试
+
+>>> 故障现象和导致原因
+
+>>> 上诉结论
+
+>>> 如何解决?解决要求
+
+>>> 服务降级
+
+>>> 服务熔断
+
+>>> 服务限流
