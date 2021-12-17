@@ -385,6 +385,8 @@ public class PaymentService {
   * http://localhost:8001/payment/hystrix/ok/1
 >>> 高并发测试
 * 使用软件 jmeter
+![Image text](image/1639725608.png?raw=true)
+![Image text](image/1639735599.png?raw=true)
 
 >>> 故障现象和导致原因
 
