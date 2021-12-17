@@ -277,7 +277,7 @@ logging:
 * YML
 ```yaml
 server:
-  8001
+  port: 8001
 spring:
   application:
     name: cloud-provider-hystrix-payment
@@ -288,7 +288,8 @@ eureka:
     #false 表示自己端就是注册中心，我的职责就是维护，并不需要检查
     fetch-registry: true
     service-url:
-      defaultZone: http: http://eureka7001.com
+      defaultZone: http://eureka7001.com:7001/eureka/
+
 ```
 * 主启动
 ```java
@@ -301,9 +302,89 @@ public class PaymentHystrixMain8001 {
 }
 ```
 * 业务类 
-* 正常测试
+```java
+package com.atguigu.springCloud.controller;
 
+import com.atguigu.springCloud.service.PaymentService;
+
+import lombok.extern.slf4j.Slf4j;
+import org.omg.CORBA.PUBLIC_MEMBER;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+/**
+ * @author HJ
+ * @version 1.0
+ * @date 2021/12/16 14:53
+ */
+@RestController
+@Slf4j
+public class PaymentController {
+    @Resource
+    private PaymentService paymentService;
+
+    @Value("${server.port}")
+    private String serverPort;
+
+    @GetMapping("/payment/hystrix/ok/{id}")
+    public String paymentInfo_OK(@PathVariable("id") Integer id){
+        String result =paymentService.paymentInfo_OK(id);
+        log.info("****result: "+result);
+        return result;
+    }
+
+    @GetMapping("/payment/hystrix/timeout/{id}")
+    public String paymentInfo_TimeOut(@PathVariable("id") Integer id){
+        String result =paymentService.paymentInfo_TimeOut(id);
+        log.info("****result: "+result);
+        return result;
+    }
+}
+```
+
+```java
+package com.atguigu.springCloud.service;
+
+import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @author HJ
+ * @version 1.0
+ * @date 2021/12/16 11:28
+ */
+@Service
+public class PaymentService {
+    /**
+     * 正常访问 OK
+     * @param id
+     * @return
+     */
+    public String paymentInfo_OK(Integer id){
+        return "线程池:"+Thread.currentThread().getName()+"paymentInfo_OK,id"+id+"\t"+"o(^_^)哈哈";
+    }
+
+    public String paymentInfo_TimeOut(Integer id){
+        int timeNumber=3;
+        try{
+            TimeUnit.SECONDS.sleep(timeNumber);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        return "线程池:"+Thread.currentThread().getName()+"paymentInfo_TimeOut,id"+id+"\t"+"o(^_^)哈哈"+"耗时3秒";
+    }
+}
+```
+* 正常测试
+  * http://localhost:8001/payment/hystrix/timeout/1
+  * http://localhost:8001/payment/hystrix/ok/1
 >>> 高并发测试
+* 使用软件 jmeter
 
 >>> 故障现象和导致原因
 
