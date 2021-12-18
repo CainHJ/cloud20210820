@@ -20,6 +20,7 @@
     <module>cloud-consumerconsul-order80</module>
     <module>cloud-consumer-feign-order80</module>
       <module>cloud-provider-hystrix-payment8001</module>
+    <module>cloud-consumer-feign-hystrix-order80</module>
   </modules>
 
   <!--1.父级工程 不是jar 不是war 删调src maven 的继承 传递 依赖-->

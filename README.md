@@ -387,14 +387,120 @@ public class PaymentService {
 * 使用软件 jmeter
 ![Image text](image/1639725608.png?raw=true)
 ![Image text](image/1639735599.png?raw=true)
+>>> 80新建加入
+* `cloud-consumer-feign-hystrix-order80`
+  * 新建
+  * POM
+  ```xml
+      <dependencies>
+          <!--hystrix-->
+          <dependency>
+              <groupId>org.springframework.cloud</groupId>
+              <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+          </dependency>
+          <!--eureka client-->
+          <dependency>
+              <groupId>org.springframework.cloud</groupId>
+              <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+          </dependency>
+  
+          <dependency>
+              <groupId>com.atguigu.springcloud</groupId>
+              <artifactId>cloud-api-commons</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+  
+  
+          <dependency>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <optional>true</optional>
+          </dependency>
+  
+          <!--热部署-->
+          <dependency>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-devtools</artifactId>
+              <!--            <scope>runtime</scope>-->
+              <optional>true</optional>
+  
+          </dependency>
+      </dependencies>
+  ```
+  * YML
+  ```yaml
+  server:
+    port: 80
+  spring:
+    application:
+      name: cloud-consumer-feign-hystrix-order80
+  eureka:
+    client:
+      #false 表示不向注册中心注册
+      register-with-eureka: true
+      #false 表示自己端就是注册中心，我的职责就是维护，并不需要检查
+      fetch-registry: true
+      service-url:
+        defaultZone: http://eureka7001.com:7001/eureka/
 
+  ```
+  * 主启动类
+    * `OrderHystrixMain80`
+    ```java
+    @SpringBootApplication
+    @EnableFeignClients
+    public class OrderHystrixMain80 {
+        public static void main(String[] args) {
+            SpringApplication.run(OrderHystrixMain80.class,args);
+        }
+    }
+    ```
+  * 业务类
+    * `OrderHystrixController`
+    ```java
+    @Slf4j
+    @RestController
+    public class OrderHystrixController {
+        @Resource
+        private PaymentHysitrixService paymentHysitrixService;
+    
+        @GetMapping("/consumer/hystrix/ok/{id}")
+        public String paymentInfo_OK(@PathVariable("id") Integer id){
+            return paymentHysitrixService.paymentInfo_OK(id);
+        }
+    
+        @GetMapping("/consumer/hystrix/timeout/{id}")
+        public String paymentInfo_TimeOut(@PathVariable("id") Integer id){
+            return paymentHysitrixService.paymentInfo_TimeOut(id);
+        }
+    
+    }
+    ```
+    * `PaymentHysitrixService`    
+    ```java
+        @Component
+        @FeignClient(value="CLOUD-PROVIDER-HYSTRIX-PAYMENT")
+        public interface PaymentHysitrixService {
+        
+            @GetMapping("/payment/hystrix/ok/{id}")
+            public String paymentInfo_OK(@PathVariable("id") Integer id);
+        
+            @GetMapping("/payment/hystrix/timeout/{id}")
+            public String paymentInfo_TimeOut(@PathVariable("id") Integer id);
+        }
+    ```      
+  * 业务测试
+  * 高并发测试
 >>> 故障现象和导致原因
-
+* 调用转圈圈
 >>> 上诉结论
-
+* 线程被挤占 响应缓慢
 >>> 如何解决?解决要求
-
+* 对方服务方(8001)超时,调用者(80)不能一直卡死等待,必须有服务降级
+* 对方服务(8001)down机,调用者(80)不能一直卡死等待,必须有服务降级
+* 对方服务(8001)OK,调用者(80)自己出故障或有自我要求(自己的等待时间小于服务提供者小于服务提供者,自我降级)
 >>> 服务降级
+* 降级配置 `@HystrixCommand`
 
 >>> 服务熔断
 
